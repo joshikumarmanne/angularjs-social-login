@@ -148,9 +148,9 @@ socialLogin.directive("linkedIn", function($rootScope, social, socialLoginServic
 		link: function(scope, ele, attr){
 		    ele.on("click", function(){
 		  		IN.User.authorize(function(){
-					IN.API.Raw("/people/~:(id,first-name,last-name,email-address)").result(function(res){
+					IN.API.Raw("/people/~:(id,first-name,last-name,email-address,picture-url)").result(function(res){
 						socialLoginService.setProviderCookie("linkedIn");
-						var userDetails = {name: res.firstName + " " + res.lastName, email: res.emailAddress, uid: res.id, provider: "linkedIN"}
+						var userDetails = {name: res.firstName + " " + res.lastName, email: res.emailAddress, uid: res.id, provider: "linkedIN", profile_picture: res.pictureUrl}
 						$rootScope.$broadcast('event:social-sign-in-success', userDetails);
 				    });
 				});
@@ -172,7 +172,7 @@ socialLogin.directive("gLogin", function($rootScope, social, socialLoginService)
 	        		var profile = googleUser.getBasicProfile();
 	        		var idToken = googleUser.getAuthResponse().id_token
 	        		socialLoginService.setProviderCookie("google");
-	        		$rootScope.$broadcast('event:social-sign-in-success', {token: idToken, name: profile.getName(), email: profile.getEmail(), uid: profile.getId(), provider: "google"});
+	        		$rootScope.$broadcast('event:social-sign-in-success', {token: idToken, name: profile.getName(), email: profile.getEmail(), uid: profile.getId(), provider: "google", profile_picture: profile.getImageUrl()});
 	        	}, function(err){
 	        		console.log(err);
 	        	})
